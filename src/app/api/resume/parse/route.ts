@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           data: parsed.links.map((item, order) => ({
             portfolioId: portfolio.id,
             label: item.label,
-            url: item.url,
+            url: item.url ?? "",
             order,
           })),
         });
@@ -82,10 +82,10 @@ export async function POST(req: Request) {
         await tx.experience.createMany({
           data: parsed.experience.map((item, order) => ({
             portfolioId: portfolio.id,
-            company: item.company,
-            role: item.role,
-            start: item.start,
-            end: item.end,
+            company: item.company ?? "",
+            role: item.role ?? "",
+            start: item.start ?? "",
+            end: item.end ?? "",
             highlights: item.highlights,
             order,
           })),
@@ -97,10 +97,10 @@ export async function POST(req: Request) {
         await tx.education.createMany({
           data: parsed.education.map((item, order) => ({
             portfolioId: portfolio.id,
-            school: item.school,
-            degree: item.degree,
-            start: item.start,
-            end: item.end,
+            school: item.school ?? "",
+            degree: item.degree ?? "",
+            start: item.start ?? "",
+            end: item.end ?? "",
             order,
           })),
         });
@@ -111,9 +111,9 @@ export async function POST(req: Request) {
         await tx.project.createMany({
           data: parsed.projects.map((item, order) => ({
             portfolioId: portfolio.id,
-            name: item.name,
-            description: item.description,
-            url: item.url,
+            name: item.name ?? "",
+            description: item.description ?? "",
+            url: item.url ?? "",
             highlights: item.highlights,
             order,
           })),
