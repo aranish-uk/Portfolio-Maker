@@ -1,4 +1,5 @@
 import mammoth from "mammoth";
+import path from "path";
 
 type PdfParseFn = (dataBuffer: Buffer) => Promise<{ text: string }>;
 
@@ -53,10 +54,14 @@ export async function extractResumeText(file: File): Promise<string> {
     // Dynamically import pdfjs-dist
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
 
-    // Explictly point to the worker file in the same directory as the library file
-    // This is required for FakeWorker to function in Node.js environments
+    // Explictly point to the worker file using absolute path
+    // This helps resolve the file correctly in Vercel's serverless environment
+    // where chunks might be moved around.
     if (pdfjs.GlobalWorkerOptions) {
-      pdfjs.GlobalWorkerOptions.workerSrc = "./pdf.worker.mjs";
+      pdfjs.GlobalWorkerOptions.workerSrc = path.join(
+        process.cwd(),
+        "node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs"
+      );
     }
 
     // We need to pass data as a Uint8Array
