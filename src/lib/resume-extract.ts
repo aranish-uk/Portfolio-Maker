@@ -50,9 +50,16 @@ export async function extractResumeText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   if (type.includes("pdf") || file.name.toLowerCase().endsWith(".pdf")) {
-    // Dynamically import pdfjs-dist (CJS legacy build for better Node compatibility)
-    // Using .js instead of .mjs helps avoid split chunks for the worker in some serverless bundlers
-    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
+    // Dynamically import pdfjs-dist
+    // Reverting to .mjs as .js might not be exposed or found by bundler in this version
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+
+    // Explicitly disable worker to prevent "Cannot find module ... pdf.worker.mjs"
+    // @ts-expect-error - GlobalWorkerOptions might be missing in types
+    if (pdfjs.GlobalWorkerOptions) {
+      // @ts-expect-error - workerSrc might be missing
+      pdfjs.GlobalWorkerOptions.workerSrc = "";
+    }
 
     // We need to pass data as a Uint8Array
     const uint8Array = new Uint8Array(buffer);
@@ -63,6 +70,8 @@ export async function extractResumeText(file: File): Promise<string> {
       useSystemFonts: true,
       disableFontFace: true, // silences font warnings
       isEvalSupported: false, // silences some evaluation warnings
+      // @ts-expect-error - disableWorker might not be in types but is supported in some versions
+      disableWorker: true, // Try to disable worker logic
     });
 
     const pdfDocument = await loadingTask.promise;
