@@ -14,10 +14,10 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-16">
-      <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6">
-        <h1 className="text-2xl font-bold text-slate-900">Sign in</h1>
-        <p className="mt-1 text-sm text-slate-600">Use Google or GitHub to create and manage your portfolio.</p>
+    <main className="min-h-screen bg-slate-950 px-4 py-16">
+      <div className="mx-auto max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-indigo-950/30">
+        <h1 className="text-2xl font-bold text-slate-100">Sign in</h1>
+        <p className="mt-1 text-sm text-slate-400">Use Google or GitHub to create and manage your portfolio.</p>
         <div className="mt-6">
           <SignInButtons providers={providers} />
         </div>

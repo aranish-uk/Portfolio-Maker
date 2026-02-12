@@ -1,14 +1,12 @@
 import mammoth from "mammoth";
-import { PDFParse } from "pdf-parse";
 
 export async function extractResumeText(file: File): Promise<string> {
   const type = file.type || "";
   const buffer = Buffer.from(await file.arrayBuffer());
 
   if (type.includes("pdf") || file.name.toLowerCase().endsWith(".pdf")) {
-    const parser = new PDFParse({ data: buffer });
-    const parsed = await parser.getText();
-    await parser.destroy();
+    const pdfParse = (await import("pdf-parse")).default;
+    const parsed = await pdfParse(buffer);
     return parsed.text.trim();
   }
 

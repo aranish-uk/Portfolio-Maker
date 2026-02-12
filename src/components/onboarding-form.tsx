@@ -197,17 +197,17 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-xl border border-slate-200 bg-white p-4">
+      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
         <h2 className="text-lg font-semibold">1. Upload Resume</h2>
-        <p className="mt-1 text-sm text-slate-600">Upload PDF or DOCX, then parse it with AI into structured fields.</p>
+        <p className="mt-1 text-sm text-slate-400">Upload PDF or DOCX, then parse it with AI into structured fields.</p>
         <input
-          className="mt-3 block w-full rounded-lg border border-slate-300 p-2 text-sm"
+          className="mt-3 block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100"
           type="file"
           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
         />
         <button
-          className="mt-3 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
           type="button"
           disabled={!resumeFile || isBusy}
           onClick={uploadResume}
@@ -216,16 +216,16 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
         </button>
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-4">
+      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
         <h2 className="text-lg font-semibold">2. Upload Hero Image</h2>
         <input
-          className="mt-3 block w-full rounded-lg border border-slate-300 p-2 text-sm"
+          className="mt-3 block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100"
           type="file"
           accept="image/*"
           onChange={(event) => setHeroFile(event.target.files?.[0] || null)}
         />
         <button
-          className="mt-3 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
           type="button"
           disabled={!heroFile || isBusy}
           onClick={uploadHero}
@@ -243,32 +243,32 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
         ) : null}
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-4">
+      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
         <h2 className="text-lg font-semibold">3. Edit Profile Data</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <input className="rounded-lg border border-slate-300 p-2 text-sm" placeholder="Name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-          <input className="rounded-lg border border-slate-300 p-2 text-sm" placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} />
-          <input className="rounded-lg border border-slate-300 p-2 text-sm" placeholder="Email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
-          <input className="rounded-lg border border-slate-300 p-2 text-sm" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} />
+          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
+          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
         </div>
-        <textarea className="mt-3 min-h-24 w-full rounded-lg border border-slate-300 p-2 text-sm" placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-600">Skills (one per line)</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-300 p-2 text-sm" value={skillsText} onChange={(e) => setSkillsText(e.target.value)} />
+        <textarea className="mt-3 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Skills (one per line)</label>
+        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100" value={skillsText} onChange={(e) => setSkillsText(e.target.value)} />
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-600">Links JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-300 p-2 text-sm font-mono" value={linksJson} onChange={(e) => setLinksJson(e.target.value)} />
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Links JSON</label>
+        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={linksJson} onChange={(e) => setLinksJson(e.target.value)} />
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-600">Experience JSON</label>
-        <textarea className="mt-1 min-h-32 w-full rounded-lg border border-slate-300 p-2 text-sm font-mono" value={experiencesJson} onChange={(e) => setExperiencesJson(e.target.value)} />
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Experience JSON</label>
+        <textarea className="mt-1 min-h-32 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={experiencesJson} onChange={(e) => setExperiencesJson(e.target.value)} />
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-600">Education JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-300 p-2 text-sm font-mono" value={educationsJson} onChange={(e) => setEducationsJson(e.target.value)} />
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Education JSON</label>
+        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={educationsJson} onChange={(e) => setEducationsJson(e.target.value)} />
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-600">Projects JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-300 p-2 text-sm font-mono" value={projectsJson} onChange={(e) => setProjectsJson(e.target.value)} />
+        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Projects JSON</label>
+        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={projectsJson} onChange={(e) => setProjectsJson(e.target.value)} />
 
         <button
-          className="mt-4 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
           type="button"
           disabled={isBusy}
           onClick={saveProfile}
@@ -277,7 +277,7 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
         </button>
       </section>
 
-      {status ? <p className="text-sm text-slate-700">{status}</p> : null}
+      {status ? <p className="text-sm text-slate-300">{status}</p> : null}
     </div>
   );
 }

@@ -38,25 +38,25 @@ export default function PublishPage() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <h1 className="text-2xl font-bold text-slate-900">Publish</h1>
-      <p className="mt-1 text-sm text-slate-600">Choose your slug and publish your portfolio.</p>
+    <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <h1 className="text-2xl font-bold text-slate-100">Publish</h1>
+      <p className="mt-1 text-sm text-slate-400">Choose your slug and publish your portfolio.</p>
       <input
-        className="mt-4 w-full rounded-lg border border-slate-300 p-2 text-sm"
+        className="mt-4 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100"
         value={slug}
         onChange={(e) => setSlug(e.target.value)}
       />
-      <button className="mt-3 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white" type="button" onClick={publish}>
+      <button className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" type="button" onClick={publish}>
         Publish
       </button>
 
       {publishedSlug ? (
-        <p className="mt-3 text-sm text-slate-800">
-          Public URL: <a className="text-indigo-600" href={`/u/${publishedSlug}`}>{`/u/${publishedSlug}`}</a>
+        <p className="mt-3 text-sm text-slate-200">
+          Public URL: <a className="text-indigo-400 hover:text-indigo-300" href={`/u/${publishedSlug}`}>{`/u/${publishedSlug}`}</a>
         </p>
       ) : null}
 
-      {status ? <p className="mt-2 text-sm text-slate-700">{status}</p> : null}
+      {status ? <p className="mt-2 text-sm text-slate-300">{status}</p> : null}
     </div>
   );
 }

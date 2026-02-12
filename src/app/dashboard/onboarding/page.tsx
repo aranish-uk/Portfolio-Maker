@@ -14,7 +14,7 @@ export default async function OnboardingPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold text-slate-900">Onboarding Wizard</h1>
+      <h1 className="mb-4 text-2xl font-bold text-slate-100">Onboarding Wizard</h1>
       <OnboardingForm initial={full} />
     </div>
   );
