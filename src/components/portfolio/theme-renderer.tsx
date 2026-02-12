@@ -302,7 +302,7 @@ function SkillList({ skills, theme }: { skills: PublicPortfolio["skills"]; theme
   return (
     <div className="flex flex-wrap gap-2">
       {skills.map((skill) => (
-        <span key={skill.value} className={`px-3 py-1 rounded-full text-sm font-medium border ${theme.classes.border} ${theme.classes.accent} bg-current bg-opacity-10 dark:bg-opacity-20`}>
+        <span key={skill.value} className={`px-3 py-1 rounded-full text-sm font-medium border ${theme.classes.border} ${theme.classes.accent} bg-black/5 dark:bg-white/10`}>
           {skill.value}
         </span>
       ))}
