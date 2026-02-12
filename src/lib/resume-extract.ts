@@ -51,12 +51,12 @@ export async function extractResumeText(file: File): Promise<string> {
 
   if (type.includes("pdf") || file.name.toLowerCase().endsWith(".pdf")) {
     // Dynamically import pdfjs-dist
-    // Reverting to .mjs as .js might not be exposed or found by bundler in this version
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
 
-    // Explicitly disable worker to prevent "Cannot find module ... pdf.worker.mjs"
+    // Explictly point to the worker file in the same directory as the library file
+    // This is required for FakeWorker to function in Node.js environments
     if (pdfjs.GlobalWorkerOptions) {
-      pdfjs.GlobalWorkerOptions.workerSrc = "";
+      pdfjs.GlobalWorkerOptions.workerSrc = "./pdf.worker.mjs";
     }
 
     // We need to pass data as a Uint8Array
