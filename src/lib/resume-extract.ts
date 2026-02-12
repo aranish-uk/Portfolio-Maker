@@ -50,14 +50,9 @@ export async function extractResumeText(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   if (type.includes("pdf") || file.name.toLowerCase().endsWith(".pdf")) {
-    // Dynamically import pdfjs-dist
-    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-
-    // Set up the worker (even though we might not strictly need it for basic text, 
-    // it's good practice or required by some versions). 
-    // However, in a serverless node env, we often want to disable worker or point to a local file.
-    // For simplicity and stability in Next.js server actions, we'll try standard load.
-    // Note: 'legacy' build is better for Node environments in some pdfjs versions.
+    // Dynamically import pdfjs-dist (CJS legacy build for better Node compatibility)
+    // Using .js instead of .mjs helps avoid split chunks for the worker in some serverless bundlers
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
 
     // We need to pass data as a Uint8Array
     const uint8Array = new Uint8Array(buffer);
