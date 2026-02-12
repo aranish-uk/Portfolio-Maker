@@ -62,7 +62,7 @@ export async function PUT(req: Request) {
           data: data.links.map((item, index) => ({
             portfolioId: portfolio.id,
             label: item.label,
-            url: item.url,
+            url: item.url ?? "",
             order: index,
           })),
         });
