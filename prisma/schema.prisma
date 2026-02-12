@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  portfolio     Portfolio?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([sessionToken])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Portfolio {
+  id                String         @id @default(cuid())
+  userId            String         @unique
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug              String         @unique
+  displayName       String?
+  headline          String?
+  bio               String?
+  contactEmail      String?
+  location          String?
+  heroImageUrl      String?
+  theme             ThemeName      @default(CLASSIC)
+  published         Boolean        @default(false)
+  skills            Skill[]
+  links             Link[]
+  experiences       Experience[]
+  educations        Education[]
+  projects          Project[]
+  resumeUploads     ResumeUpload[]
+  parsedResume      ParsedResume?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model Skill {
+  id          String    @id @default(cuid())
+  portfolioId String
+  value       String
+  order       Int       @default(0)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model Link {
+  id          String    @id @default(cuid())
+  portfolioId String
+  label       String
+  url         String
+  order       Int       @default(0)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id          String    @id @default(cuid())
+  portfolioId String
+  company     String
+  role        String
+  start       String
+  end         String
+  highlights  Json
+  order       Int       @default(0)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model Education {
+  id          String    @id @default(cuid())
+  portfolioId String
+  school      String
+  degree      String
+  start       String
+  end         String
+  order       Int       @default(0)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  portfolioId String
+  name        String
+  description String
+  url         String?
+  highlights  Json
+  order       Int       @default(0)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model ResumeUpload {
+  id          String    @id @default(cuid())
+  portfolioId String
+  fileName    String
+  fileType    String
+  fileUrl     String?
+  content     String
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+model ParsedResume {
+  id          String    @id @default(cuid())
+  portfolioId String    @unique
+  rawJson     Json
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum ThemeName {
+  CLASSIC
+  MINIMAL
+  BOLD
+  SUNSET
+  OCEAN
+}

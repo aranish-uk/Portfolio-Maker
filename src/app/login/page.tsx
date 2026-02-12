@@ -1,0 +1,27 @@
+import { redirect } from "next/navigation";
+import { getAuthSession } from "@/lib/auth";
+import { SignInButtons } from "@/components/sign-in-buttons";
+
+const providers = [
+  process.env.GITHUB_ID && process.env.GITHUB_SECRET ? { id: "github", label: "GitHub" } : null,
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? { id: "google", label: "Google" } : null,
+].filter((item): item is { id: string; label: string } => Boolean(item));
+
+export default async function LoginPage() {
+  const session = await getAuthSession();
+  if (session?.user) {
+    redirect("/dashboard");
+  }
+
+  return (
+    <main className="min-h-screen bg-slate-100 px-4 py-16">
+      <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6">
+        <h1 className="text-2xl font-bold text-slate-900">Sign in</h1>
+        <p className="mt-1 text-sm text-slate-600">Use Google or GitHub to create and manage your portfolio.</p>
+        <div className="mt-6">
+          <SignInButtons providers={providers} />
+        </div>
+      </div>
+    </main>
+  );
+}
