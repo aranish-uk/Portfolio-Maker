@@ -19,10 +19,12 @@ export async function extractResumeText(file: File): Promise<string> {
     // We need to pass data as a Uint8Array
     const uint8Array = new Uint8Array(buffer);
 
+    // Config to reduce serverless warnings
     const loadingTask = pdfjs.getDocument({
       data: uint8Array,
       useSystemFonts: true,
-      disableFontFace: true,
+      disableFontFace: true, // silences font warnings
+      isEvalSupported: false, // silences some evaluation warnings
     });
 
     const pdfDocument = await loadingTask.promise;
@@ -30,7 +32,9 @@ export async function extractResumeText(file: File): Promise<string> {
 
     for (let i = 1; i <= pdfDocument.numPages; i++) {
       const page = await pdfDocument.getPage(i);
-      const textContent = await page.getTextContent();
+      const textContent = await page.getTextContent({
+        includeMarkedContent: false,
+      });
       const pageText = textContent.items.map((item: any) => item.str).join(" ");
       fullText += pageText + "\n";
     }
