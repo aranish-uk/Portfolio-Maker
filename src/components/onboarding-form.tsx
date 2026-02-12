@@ -196,88 +196,201 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
   }
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-        <h2 className="text-lg font-semibold">1. Upload Resume</h2>
-        <p className="mt-1 text-sm text-slate-400">Upload PDF or DOCX, then parse it with AI into structured fields.</p>
-        <input
-          className="mt-3 block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100"
-          type="file"
-          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
-        />
-        <button
-          className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
-          type="button"
-          disabled={!resumeFile || isBusy}
-          onClick={uploadResume}
-        >
-          Upload and Parse
-        </button>
-      </section>
-
-      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-        <h2 className="text-lg font-semibold">2. Upload Hero Image</h2>
-        <input
-          className="mt-3 block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100"
-          type="file"
-          accept="image/*"
-          onChange={(event) => setHeroFile(event.target.files?.[0] || null)}
-        />
-        <button
-          className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
-          type="button"
-          disabled={!heroFile || isBusy}
-          onClick={uploadHero}
-        >
-          Upload Image
-        </button>
-        {portfolio.heroImageUrl ? (
-          <Image
-            src={portfolio.heroImageUrl}
-            alt="Hero preview"
-            className="mt-3 h-32 w-full rounded-lg object-cover"
-            width={1200}
-            height={400}
-          />
-        ) : null}
-      </section>
-
-      <section className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-        <h2 className="text-lg font-semibold">3. Edit Profile Data</h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} />
-          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
-          <input className="rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+    <div className="mx-auto max-w-3xl space-y-8 pb-20">
+      {/* Step 1: Resume Upload */}
+      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm transition-all hover:border-slate-700">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/10 text-sm font-bold text-indigo-400">
+            1
+          </div>
+          <h2 className="text-lg font-semibold text-slate-100">Upload Resume</h2>
         </div>
-        <textarea className="mt-3 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 placeholder-slate-500" placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Skills (one per line)</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100" value={skillsText} onChange={(e) => setSkillsText(e.target.value)} />
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Links JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={linksJson} onChange={(e) => setLinksJson(e.target.value)} />
+        <p className="mb-6 text-sm text-slate-400">
+          Upload your existing resume (PDF or DOCX). We'll use AI to extract your details and pre-fill your portfolio.
+        </p>
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Experience JSON</label>
-        <textarea className="mt-1 min-h-32 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={experiencesJson} onChange={(e) => setExperiencesJson(e.target.value)} />
+        <div className="group relative rounded-xl border-2 border-dashed border-slate-700 bg-slate-950/50 p-8 text-center transition-colors hover:border-indigo-500/50 hover:bg-slate-900">
+          <input
+            className="absolute inset-0 cursor-pointer opacity-0"
+            type="file"
+            accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
+            disabled={isBusy}
+          />
+          <div className="flex flex-col items-center gap-2">
+            <div className="rounded-full bg-slate-800 p-3 text-slate-400 group-hover:text-indigo-400">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-slate-300">
+              {resumeFile ? resumeFile.name : "Click or drag to upload"}
+            </p>
+            <p className="text-xs text-slate-500">PDF or DOCX up to 10MB</p>
+          </div>
+        </div>
 
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Education JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={educationsJson} onChange={(e) => setEducationsJson(e.target.value)} />
-
-        <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-slate-400">Projects JSON</label>
-        <textarea className="mt-1 min-h-24 w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm font-mono text-slate-100" value={projectsJson} onChange={(e) => setProjectsJson(e.target.value)} />
-
-        <button
-          className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 hover:bg-indigo-500"
-          type="button"
-          disabled={isBusy}
-          onClick={saveProfile}
-        >
-          Save Profile
-        </button>
+        <div className="mt-4 flex justify-end">
+          <button
+            className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50"
+            type="button"
+            disabled={!resumeFile || isBusy}
+            onClick={uploadResume}
+          >
+            {isBusy && status.includes("resume") ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"></span>
+            ) : null}
+            Upload & Parse
+          </button>
+        </div>
       </section>
 
-      {status ? <p className="text-sm text-slate-300">{status}</p> : null}
+      {/* Step 2: Hero Image */}
+      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm transition-all hover:border-slate-700">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/10 text-sm font-bold text-indigo-400">
+            2
+          </div>
+          <h2 className="text-lg font-semibold text-slate-100">Hero Image</h2>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="space-y-4">
+            <p className="text-sm text-slate-400">
+              Choose a professional photo for your portfolio header.
+            </p>
+            <input
+              className="block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 file:mr-4 file:rounded-full file:border-0 file:bg-slate-800 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-indigo-400 hover:file:bg-slate-700"
+              type="file"
+              accept="image/*"
+              onChange={(event) => setHeroFile(event.target.files?.[0] || null)}
+              disabled={isBusy}
+            />
+            <button
+              className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50"
+              type="button"
+              disabled={!heroFile || isBusy}
+              onClick={uploadHero}
+            >
+              {isBusy && status.includes("Hero") ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"></span>
+              ) : null}
+              Upload Image
+            </button>
+          </div>
+
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-950">
+            {portfolio.heroImageUrl ? (
+              <Image
+                src={portfolio.heroImageUrl}
+                alt="Hero preview"
+                className="h-full w-full object-cover"
+                width={600}
+                height={400}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-slate-600">
+                <span className="text-sm">No image uploaded</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Step 3: Profile Details */}
+      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm transition-all hover:border-slate-700">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/10 text-sm font-bold text-indigo-400">
+            3
+          </div>
+          <h2 className="text-lg font-semibold text-slate-100">Details</h2>
+        </div>
+
+        <div className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Display Name</label>
+              <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Jane Doe" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Headline</label>
+              <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Senior Software Engineer" value={headline} onChange={(e) => setHeadline(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Contact Email</label>
+              <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="jane@example.com" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Location</label>
+              <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="San Francisco, CA" value={location} onChange={(e) => setLocation(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-400">Bio</label>
+            <textarea className="min-h-[100px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Brief professional summary..." value={bio} onChange={(e) => setBio(e.target.value)} />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-400">Skills (one per line)</label>
+            <textarea className="min-h-[100px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" value={skillsText} onChange={(e) => setSkillsText(e.target.value)} />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Links (JSON)</label>
+              <textarea className="min-h-[120px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-mono text-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" value={linksJson} onChange={(e) => setLinksJson(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-400">Education (JSON)</label>
+              <textarea className="min-h-[120px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-mono text-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" value={educationsJson} onChange={(e) => setEducationsJson(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-400">Experience (JSON)</label>
+            <textarea className="min-h-[150px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-mono text-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" value={experiencesJson} onChange={(e) => setExperiencesJson(e.target.value)} />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-400">Projects (JSON)</label>
+            <textarea className="min-h-[150px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-mono text-slate-300 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" value={projectsJson} onChange={(e) => setProjectsJson(e.target.value)} />
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <button
+              className="flex items-center gap-2 rounded-lg bg-green-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-green-500 disabled:opacity-50"
+              type="button"
+              disabled={isBusy}
+              onClick={saveProfile}
+            >
+              {isBusy && status.includes("Saving") ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"></span>
+              ) : null}
+              Save Profile
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Status Toasts / Alerts */}
+      {status ? (
+        <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+          <div className={`flex max-w-sm items-center gap-3 rounded-lg border p-4 shadow-xl backdrop-blur-md ${status.toLowerCase().includes("fail") || status.toLowerCase().includes("error")
+              ? "border-red-500/50 bg-red-950/90 text-red-200"
+              : "border-indigo-500/50 bg-indigo-950/90 text-indigo-200"
+            }`}>
+            {status.toLowerCase().includes("fail") || status.toLowerCase().includes("error") ? (
+              <svg className="h-5 w-5 shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            ) : (
+              <svg className="h-5 w-5 shrink-0 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            )}
+            <p className="text-sm font-medium">{status}</p>
+            <button onClick={() => setStatus("")} className="ml-auto opacity-70 hover:opacity-100"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -11,6 +11,19 @@ export async function saveUpload(file: File, folder: string): Promise<{ url: str
   const name = `${randomUUID()}-${safeFileName(file.name)}`;
   const key = `${folder}/${name}`;
 
+  // In production, we strictly require Vercel Blob.
+  if (process.env.NODE_ENV === "production") {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      throw new Error("Server configuration error: Missing blob storage token.");
+    }
+    const blob = await put(key, file, {
+      access: "public",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+    return { url: blob.url, key };
+  }
+
+  // In development, we can try Vercel Blob if token is present, otherwise fallback to local.
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(key, file, {
       access: "public",
