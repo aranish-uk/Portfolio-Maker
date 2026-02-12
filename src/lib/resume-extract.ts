@@ -55,9 +55,7 @@ export async function extractResumeText(file: File): Promise<string> {
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
 
     // Explicitly disable worker to prevent "Cannot find module ... pdf.worker.mjs"
-    // @ts-expect-error - GlobalWorkerOptions might be missing in types
     if (pdfjs.GlobalWorkerOptions) {
-      // @ts-expect-error - workerSrc might be missing
       pdfjs.GlobalWorkerOptions.workerSrc = "";
     }
 
