@@ -57,5 +57,19 @@ export const slugSchema = z.object({
 });
 
 export const themeSchema = z.object({
-  theme: z.enum(["CLASSIC", "MINIMAL", "BOLD", "SUNSET", "OCEAN"]),
+  theme: z.enum([
+    "CLASSIC",
+    "MINIMAL",
+    "BOLD",
+    "SUNSET",
+    "OCEAN",
+    "EXECUTIVE",
+    "STUDIO",
+    "SUNRISE",
+    "COASTAL",
+    "MIDNIGHT",
+    "ABYSS",
+    "NOIR",
+    "TERMINAL",
+  ]),
 });
