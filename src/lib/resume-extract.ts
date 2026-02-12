@@ -1,11 +1,15 @@
 import mammoth from "mammoth";
 
+type PdfParseFn = (dataBuffer: Buffer) => Promise<{ text: string }>;
+
 export async function extractResumeText(file: File): Promise<string> {
   const type = file.type || "";
   const buffer = Buffer.from(await file.arrayBuffer());
 
   if (type.includes("pdf") || file.name.toLowerCase().endsWith(".pdf")) {
-    const pdfParse = (await import("pdf-parse")).default;
+    // Import parser internals directly to avoid the package-root debug path
+    // that attempts to read local test fixtures in serverless runtimes.
+    const pdfParse = (await import("pdf-parse/lib/pdf-parse.js")).default as PdfParseFn;
     const parsed = await pdfParse(buffer);
     return parsed.text.trim();
   }
