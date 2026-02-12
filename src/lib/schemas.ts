@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const linkSchema = z.object({
   label: z.string().min(1).max(50),
-  url: z.string().url().optional().or(z.literal("")),
+  url: z.string().optional().or(z.literal("")),
 });
 
 export const experienceSchema = z.object({
@@ -23,7 +23,7 @@ export const educationSchema = z.object({
 export const projectSchema = z.object({
   name: z.string().optional().or(z.literal("")),
   description: z.string().optional().or(z.literal("")),
-  url: z.string().url().optional().or(z.literal("")),
+  url: z.string().optional().or(z.literal("")),
   highlights: z.array(z.string()).default([]),
 });
 
