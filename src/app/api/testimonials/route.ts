@@ -67,6 +67,7 @@ export async function GET() {
                         select: {
                             slug: true,
                             headline: true,
+                            heroImageUrl: true,
                         },
                     },
                 },
@@ -86,6 +87,9 @@ export async function GET() {
             }
         }
 
+        // Fallback to hero image if user image is missing
+        const image = t.isAnonymous ? null : (t.user.image || t.user.portfolio?.heroImageUrl);
+
         return {
             id: t.id,
             content: t.content,
@@ -95,7 +99,7 @@ export async function GET() {
                 ? { name: "Anonymous User", image: null, headline: "Portfolio Maker User", website: null }
                 : {
                     name: displayName,
-                    image: t.user.image,
+                    image: image,
                     headline: t.user.portfolio?.headline || "Portfolio Creator",
                     website: t.showWebsite && t.user.portfolio ? `/u/${t.user.portfolio.slug}` : null,
                 },
