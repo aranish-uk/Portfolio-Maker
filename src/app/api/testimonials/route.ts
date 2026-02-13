@@ -75,20 +75,32 @@ export async function GET() {
     });
 
     // Filter sensitive data
-    const safeTestimonials = testimonials.map((t) => ({
-        id: t.id,
-        content: t.content,
-        rating: t.rating,
-        createdAt: t.createdAt,
-        author: t.isAnonymous
-            ? { name: "Anonymous User", image: null, headline: "Portfolio Maker User", website: null }
-            : {
-                name: t.user.name || "User",
-                image: t.user.image,
-                headline: t.user.portfolio?.headline || "Portfolio Creator",
-                website: t.showWebsite && t.user.portfolio ? `/u/${t.user.portfolio.slug}` : null,
-            },
-    }));
+    const safeTestimonials = testimonials.map((t) => {
+        let displayName = "Anonymous User";
+        if (!t.isAnonymous && t.user.name) {
+            const parts = t.user.name.split(" ");
+            if (parts.length > 1) {
+                displayName = `${parts[0]} ${parts[parts.length - 1][0]}.`;
+            } else {
+                displayName = parts[0];
+            }
+        }
+
+        return {
+            id: t.id,
+            content: t.content,
+            rating: t.rating,
+            createdAt: t.createdAt,
+            author: t.isAnonymous
+                ? { name: "Anonymous User", image: null, headline: "Portfolio Maker User", website: null }
+                : {
+                    name: displayName,
+                    image: t.user.image,
+                    headline: t.user.portfolio?.headline || "Portfolio Creator",
+                    website: t.showWebsite && t.user.portfolio ? `/u/${t.user.portfolio.slug}` : null,
+                },
+        };
+    });
 
     return NextResponse.json(safeTestimonials);
 }

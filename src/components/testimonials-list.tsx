@@ -15,6 +15,7 @@ export async function TestimonialsList() {
                         select: {
                             slug: true,
                             headline: true,
+                            heroImageUrl: true,
                         },
                     },
                 },
@@ -37,9 +38,19 @@ export async function TestimonialsList() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {testimonials.map((t) => {
-                    const name = t.isAnonymous || !t.user.name ? "Anonymous User" : t.user.name;
+                    let displayName = "Anonymous User";
+                    if (!t.isAnonymous && t.user.name) {
+                        const parts = t.user.name.split(" ");
+                        if (parts.length > 1) {
+                            displayName = `${parts[0]} ${parts[parts.length - 1][0]}.`;
+                        } else {
+                            displayName = parts[0];
+                        }
+                    }
+
                     const headline = t.isAnonymous ? "Portfolio Creator" : t.user.portfolio?.headline || "Portfolio Creator";
-                    const image = t.isAnonymous ? null : t.user.image;
+                    // Fallback to hero image if user image is missing (better than nothing)
+                    const image = t.isAnonymous ? null : (t.user.image || t.user.portfolio?.heroImageUrl);
                     const showLink = !t.isAnonymous && t.showWebsite && t.user.portfolio;
 
                     return (
@@ -54,15 +65,15 @@ export async function TestimonialsList() {
                             </div>
 
                             <div className="mt-6 flex items-center gap-4">
-                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400">
+                                <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-500/10 text-indigo-400">
                                     {image ? (
-                                        <img src={image} alt={name} className="h-full w-full rounded-full object-cover" />
+                                        <img src={image} alt={displayName} className="h-full w-full object-cover" />
                                     ) : (
-                                        <span className="font-semibold">{name[0]}</span>
+                                        <span className="font-semibold">{displayName[0]}</span>
                                     )}
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <p className="truncate text-sm font-semibold text-white">{name}</p>
+                                    <p className="truncate text-sm font-semibold text-white">{displayName}</p>
                                     <p className="truncate text-xs text-slate-500">{headline}</p>
                                 </div>
                             </div>
