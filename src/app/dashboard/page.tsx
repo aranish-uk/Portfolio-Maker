@@ -33,9 +33,14 @@ export default async function DashboardPage() {
         <p className="mt-2 text-sm text-slate-300">Slug: {portfolio.slug}</p>
         <p className="text-sm text-slate-300">Published: {portfolio.published ? "Yes" : "No"}</p>
         <p className="text-sm text-slate-300">Theme: {portfolio.theme}</p>
-        <Link href={`/u/${portfolio.slug}`} target="_blank" className="mt-3 inline-block text-sm font-medium text-indigo-400 hover:text-indigo-300">
-          Open public URL
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href="/dashboard/theme" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500">
+            Customize Theme
+          </Link>
+          <Link href={`/u/${portfolio.slug}`} target="_blank" className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-indigo-400 transition hover:bg-slate-900 hover:text-indigo-300">
+            Open Website
+          </Link>
+        </div>
       </section>
 
       <section className="rounded-xl border border-slate-800 bg-slate-900 p-5">
