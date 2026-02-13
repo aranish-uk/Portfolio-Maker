@@ -2,28 +2,28 @@ import { z } from "zod";
 
 export const linkSchema = z.object({
   label: z.string().min(1).max(50),
-  url: z.string().optional().or(z.literal("")),
+  url: z.string().nullish(),
 });
 
 export const experienceSchema = z.object({
-  company: z.string().optional().or(z.literal("")),
-  role: z.string().optional().or(z.literal("")),
-  start: z.string().optional().or(z.literal("")),
-  end: z.string().optional().or(z.literal("")),
+  company: z.string().nullish(),
+  role: z.string().nullish(),
+  start: z.string().nullish(),
+  end: z.string().nullish(),
   highlights: z.array(z.string()).default([]),
 });
 
 export const educationSchema = z.object({
-  school: z.string().optional().or(z.literal("")),
-  degree: z.string().optional().or(z.literal("")),
-  start: z.string().optional().or(z.literal("")),
-  end: z.string().optional().or(z.literal("")),
+  school: z.string().nullish(),
+  degree: z.string().nullish(),
+  start: z.string().nullish(),
+  end: z.string().nullish(),
 });
 
 export const projectSchema = z.object({
-  name: z.string().optional().or(z.literal("")),
-  description: z.string().optional().or(z.literal("")),
-  url: z.string().optional().or(z.literal("")),
+  name: z.string().nullish(),
+  description: z.string().nullish(),
+  url: z.string().nullish(),
   highlights: z.array(z.string()).default([]),
 });
 
