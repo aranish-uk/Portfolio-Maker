@@ -1,10 +1,10 @@
 import { getAuthSession } from "@/lib/auth";
 import { getOrCreatePortfolio } from "@/lib/portfolio";
 import { prisma } from "@/lib/prisma";
-import { saveUpload } from "@/lib/storage";
+import { saveUpload, deleteUpload } from "@/lib/storage";
 import { NextResponse } from "next/server";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 export async function POST(req: Request) {
   const session = await getAuthSession();
@@ -24,10 +24,16 @@ export async function POST(req: Request) {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    return NextResponse.json({ error: "Image must be 5MB or less." }, { status: 400 });
+    return NextResponse.json({ error: "Image must be 2MB or less." }, { status: 400 });
   }
 
   const portfolio = await getOrCreatePortfolio(session.user.id);
+
+  // Cleanup old hero image
+  if (portfolio.heroImageUrl) {
+    await deleteUpload(portfolio.heroImageUrl);
+  }
+
   const upload = await saveUpload(file, "hero");
 
   const updated = await prisma.portfolio.update({

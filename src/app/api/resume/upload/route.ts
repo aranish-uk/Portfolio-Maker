@@ -2,10 +2,10 @@ import { getAuthSession } from "@/lib/auth";
 import { getOrCreatePortfolio } from "@/lib/portfolio";
 import { prisma } from "@/lib/prisma";
 import { extractResumeText } from "@/lib/resume-extract";
-import { saveUpload } from "@/lib/storage";
+import { saveUpload, deleteUpload } from "@/lib/storage";
 import { NextResponse } from "next/server";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 
 export async function POST(req: Request) {
   const session = await getAuthSession();
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    return NextResponse.json({ error: "Resume must be 10MB or less." }, { status: 400 });
+    return NextResponse.json({ error: "Resume must be 1MB or less." }, { status: 400 });
   }
 
   const lower = file.name.toLowerCase();
@@ -37,6 +37,19 @@ export async function POST(req: Request) {
   }
 
   const portfolio = await getOrCreatePortfolio(session.user.id);
+
+  // Cleanup old resume if exists
+  const existing = await prisma.resumeUpload.findFirst({
+    where: { portfolioId: portfolio.id },
+  });
+
+  if (existing) {
+    await Promise.all([
+      existing.fileUrl ? deleteUpload(existing.fileUrl) : Promise.resolve(),
+      prisma.resumeUpload.delete({ where: { id: existing.id } }),
+    ]);
+  }
+
   const [{ url }, content] = await Promise.all([saveUpload(file, "resumes"), extractResumeText(file)]);
 
   const upload = await prisma.resumeUpload.create({

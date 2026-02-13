@@ -84,6 +84,13 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
   async function uploadResume() {
     if (!resumeFile) return;
     setIsBusy(true);
+
+    if (resumeFile.size > 1 * 1024 * 1024) {
+      setStatus("Resume file too large (max 1MB).");
+      setIsBusy(false);
+      return;
+    }
+
     setStatus("Uploading resume...");
 
     const formData = new FormData();
@@ -124,6 +131,13 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
   async function uploadHero() {
     if (!heroFile) return;
     setIsBusy(true);
+
+    if (heroFile.size > 2 * 1024 * 1024) {
+      setStatus("Image too large (max 2MB).");
+      setIsBusy(false);
+      return;
+    }
+
     setStatus("Uploading hero image...");
 
     const formData = new FormData();
@@ -230,7 +244,7 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
             <p className="text-sm font-medium text-slate-300">
               {resumeFile ? resumeFile.name : "Click or drag to upload"}
             </p>
-            <p className="text-xs text-slate-500">PDF or DOCX up to 10MB</p>
+            <p className="text-xs text-slate-500">PDF or DOCX up to 1MB</p>
           </div>
         </div>
 
@@ -261,7 +275,7 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-4">
             <p className="text-sm text-slate-400">
-              Choose a professional photo for your portfolio header.
+              Choose a professional photo for your portfolio header (Max 2MB).
             </p>
             <input
               className="block w-full rounded-lg border border-slate-700 bg-slate-950 p-2 text-sm text-slate-100 file:mr-4 file:rounded-full file:border-0 file:bg-slate-800 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-indigo-400 hover:file:bg-slate-700"
@@ -313,15 +327,15 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
         <div className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-400">Display Name</label>
+              <label className="text-xs font-medium text-slate-400">Display Name <span className="text-red-400">*</span></label>
               <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Jane Doe" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-400">Headline</label>
+              <label className="text-xs font-medium text-slate-400">Headline <span className="text-red-400">*</span></label>
               <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Senior Software Engineer" value={headline} onChange={(e) => setHeadline(e.target.value)} />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-400">Contact Email</label>
+              <label className="text-xs font-medium text-slate-400">Contact Email <span className="text-red-400">*</span></label>
               <input className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="jane@example.com" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
             </div>
             <div className="space-y-1">
@@ -331,7 +345,7 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-400">Bio</label>
+            <label className="text-xs font-medium text-slate-400">Bio <span className="text-red-400">*</span></label>
             <textarea className="min-h-[100px] w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Brief professional summary..." value={bio} onChange={(e) => setBio(e.target.value)} />
           </div>
 

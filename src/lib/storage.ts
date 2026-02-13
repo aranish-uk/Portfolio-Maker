@@ -1,5 +1,5 @@
-import { put } from "@vercel/blob";
-import { mkdir, writeFile } from "node:fs/promises";
+import { put, del } from "@vercel/blob";
+import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
@@ -37,4 +37,22 @@ export async function saveUpload(file: File, folder: string): Promise<{ url: str
   await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, name), bytes);
   return { url: `/uploads/${folder}/${name}`, key };
+}
+
+export async function deleteUpload(url: string) {
+  // If use provided a generic Vercel Blob URL
+  if (url.startsWith("https") && process.env.BLOB_READ_WRITE_TOKEN) {
+    await del(url, { token: process.env.BLOB_READ_WRITE_TOKEN });
+    return;
+  }
+
+  // Local fallback
+  if (url.startsWith("/uploads/")) {
+    const filePath = path.join(process.cwd(), "public", url);
+    try {
+      await unlink(filePath);
+    } catch (e) {
+      console.warn("Failed to delete local file:", filePath);
+    }
+  }
 }
