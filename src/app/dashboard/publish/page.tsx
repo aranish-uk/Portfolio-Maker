@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function PublishPage() {
   const [slug, setSlug] = useState("");
@@ -57,6 +58,12 @@ export default function PublishPage() {
       ) : null}
 
       {status ? <p className="mt-2 text-sm text-slate-300">{status}</p> : null}
+
+      <div className="mt-8 pt-6 border-t border-slate-800 flex justify-end">
+        <Link href="/dashboard/theme" className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-medium">
+          Next: Customize Theme →
+        </Link>
+      </div>
     </div>
   );
 }

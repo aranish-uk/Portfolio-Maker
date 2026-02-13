@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type ApiPortfolio = {
   id: string;
@@ -44,6 +45,7 @@ function safeJsonArray<T>(value: string, fallback: T[]): T[] {
 }
 
 export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
+  const router = useRouter();
   const [portfolio, setPortfolio] = React.useState<ApiPortfolio>(initial);
   const [status, setStatus] = React.useState<string>("");
   const [isBusy, setIsBusy] = React.useState(false);
@@ -191,8 +193,9 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
     }
 
     setPortfolio(data.portfolio);
-    setStatus("Profile saved.");
-    setIsBusy(false);
+    setStatus("Saved! moving to next step...");
+    router.refresh();
+    router.push("/dashboard/publish");
   }
 
   return (
@@ -378,8 +381,8 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
       {status ? (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
           <div className={`flex max-w-sm items-center gap-3 rounded-lg border p-4 shadow-xl backdrop-blur-md ${status.toLowerCase().includes("fail") || status.toLowerCase().includes("error")
-              ? "border-red-500/50 bg-red-950/90 text-red-200"
-              : "border-indigo-500/50 bg-indigo-950/90 text-indigo-200"
+            ? "border-red-500/50 bg-red-950/90 text-red-200"
+            : "border-indigo-500/50 bg-indigo-950/90 text-indigo-200"
             }`}>
             {status.toLowerCase().includes("fail") || status.toLowerCase().includes("error") ? (
               <svg className="h-5 w-5 shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
