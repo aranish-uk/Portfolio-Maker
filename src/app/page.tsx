@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAuthSession } from "@/lib/auth";
+import { TestimonialsList } from "@/components/testimonials-list";
 
 export default async function Home() {
   const session = await getAuthSession();
@@ -13,11 +15,13 @@ export default async function Home() {
         <div className="absolute bottom-[10%] left-[20%] h-[40rem] w-[40rem] rounded-full bg-blue-500/10 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 py-10 md:py-20">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 py-8 md:py-12">
         {/* Header */}
         <header className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20" />
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl shadow-lg shadow-indigo-500/20">
+              <Image src="/icon.png" alt="Portfolio Maker Logo" fill className="object-cover" />
+            </div>
             <span className="text-lg font-bold tracking-tight text-white">Portfolio Maker</span>
           </div>
           <nav className="flex items-center gap-6">
@@ -31,7 +35,7 @@ export default async function Home() {
         </header>
 
         {/* Hero Section */}
-        <section className="flex flex-col items-center text-center">
+        <section className="flex flex-col items-center text-center pt-8">
           <div className="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300 backdrop-blur-sm">
             <span className="mr-2 flex h-2 w-2 items-center justify-center">
               <span className="absolute h-2 w-2 animate-ping rounded-full bg-indigo-400 opacity-75"></span>
@@ -72,7 +76,7 @@ export default async function Home() {
         </section>
 
         {/* Feature Grid */}
-        <section className="grid gap-8 md:grid-cols-3">
+        <section className="grid gap-8 md:grid-cols-3 pt-8 pb-4">
           {[
             {
               title: "AI Extraction",
@@ -112,8 +116,10 @@ export default async function Home() {
           ))}
         </section>
 
+        <TestimonialsList />
+
         {/* Footer */}
-        <footer className="mt-10 border-t border-slate-800 pt-8 text-center">
+        <footer className="mt-4 border-t border-slate-800 pt-8 text-center">
           <p className="text-sm text-slate-500">
             &copy; {new Date().getFullYear()} Portfolio Maker. All rights reserved.
           </p>

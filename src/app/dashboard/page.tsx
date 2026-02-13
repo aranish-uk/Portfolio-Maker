@@ -3,6 +3,7 @@ import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getOrCreatePortfolio } from "@/lib/portfolio";
 import { redirect } from "next/navigation";
+import { DashboardTestimonialButton } from "@/components/dashboard-testimonial-button";
 
 export default async function DashboardPage() {
   const session = await getAuthSession();
@@ -40,6 +41,7 @@ export default async function DashboardPage() {
           <Link href={`/u/${portfolio.slug}`} target="_blank" className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-indigo-400 transition hover:bg-slate-900 hover:text-indigo-300">
             Open Website
           </Link>
+          <DashboardTestimonialButton />
         </div>
       </section>
 
@@ -53,6 +55,6 @@ export default async function DashboardPage() {
           <li>Links: {counts?.links.length ?? 0}</li>
         </ul>
       </section>
-    </div>
+    </div >
   );
 }
