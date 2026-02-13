@@ -1,14 +1,19 @@
-"use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function TestimonialModal({ onClose }: { onClose: () => void }) {
+export type TestimonialData = {
+    rating: number;
+    content: string;
+    isAnonymous: boolean;
+    showWebsite: boolean;
+};
+
+export function TestimonialModal({ onClose, initialData }: { onClose: () => void; initialData?: TestimonialData }) {
     const router = useRouter();
-    const [rating, setRating] = useState(5);
-    const [content, setContent] = useState("");
-    const [isAnonymous, setIsAnonymous] = useState(false);
-    const [showWebsite, setShowWebsite] = useState(true);
+    const [rating, setRating] = useState(initialData?.rating ?? 5);
+    const [content, setContent] = useState(initialData?.content ?? "");
+    const [isAnonymous, setIsAnonymous] = useState(initialData?.isAnonymous ?? false);
+    const [showWebsite, setShowWebsite] = useState(initialData?.showWebsite ?? true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function handleSubmit(e: React.FormEvent) {
@@ -36,7 +41,7 @@ export function TestimonialModal({ onClose }: { onClose: () => void }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
             <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
-                <h2 className="text-xl font-bold text-slate-100">Leave a Review</h2>
+                <h2 className="text-xl font-bold text-slate-100">{initialData ? "Edit Your Review" : "Leave a Review"}</h2>
                 <p className="mb-4 text-sm text-slate-400">Tell us what you think about Portfolio Maker.</p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,7 +113,7 @@ export function TestimonialModal({ onClose }: { onClose: () => void }) {
                             disabled={isSubmitting}
                             className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
                         >
-                            {isSubmitting ? "Submitting..." : "Submit Review"}
+                            {isSubmitting ? "Submitting..." : initialData ? "Update Review" : "Submit Review"}
                         </button>
                     </div>
                 </form>

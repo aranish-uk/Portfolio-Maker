@@ -22,6 +22,16 @@ export default async function DashboardPage() {
     },
   });
 
+  const testimonial = await prisma.testimonial.findFirst({
+    where: { userId },
+    select: {
+      rating: true,
+      content: true,
+      isAnonymous: true,
+      showWebsite: true,
+    },
+  });
+
   // Redirect to onboarding if no content
   if (!counts?.parsedResume && counts?.experiences.length === 0 && counts?.projects.length === 0) {
     redirect("/dashboard/onboarding");
@@ -41,7 +51,7 @@ export default async function DashboardPage() {
           <Link href={`/u/${portfolio.slug}`} target="_blank" className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-indigo-400 transition hover:bg-slate-900 hover:text-indigo-300">
             Open Website
           </Link>
-          <DashboardTestimonialButton />
+          <DashboardTestimonialButton existingReview={testimonial} />
         </div>
       </section>
 
