@@ -8,16 +8,8 @@ export async function TestimonialsList() {
         take: 6,
         include: {
             user: {
-                select: {
-                    name: true,
-                    image: true,
-                    portfolio: {
-                        select: {
-                            slug: true,
-                            headline: true,
-                            heroImageUrl: true,
-                        },
-                    },
+                include: {
+                    portfolio: true,
                 },
             },
         },
