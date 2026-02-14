@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getOrCreatePortfolio } from "@/lib/portfolio";
 import { redirect } from "next/navigation";
 import { DashboardTestimonialButton } from "@/components/dashboard-testimonial-button";
+import { DeleteAccountSection } from "@/components/delete-account-section";
 
 export default async function DashboardPage() {
   const session = await getAuthSession();
@@ -65,6 +66,7 @@ export default async function DashboardPage() {
           <li>Links: {counts?.links.length ?? 0}</li>
         </ul>
       </section>
-    </div >
+      <DeleteAccountSection />
+    </div>
   );
 }

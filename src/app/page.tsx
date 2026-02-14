@@ -122,10 +122,16 @@ export default async function Home() {
         <TestimonialsList />
 
         {/* Footer */}
-        <footer className="mt-4 border-t border-slate-800 pt-8 text-center">
+        <footer className="mt-4 border-t border-slate-800 pt-8 pb-8 text-center">
           <p className="text-sm text-slate-500">
             &copy; {new Date().getFullYear()} Portfolio Maker. All rights reserved.
           </p>
+          <div className="mt-4 flex justify-center gap-6 text-xs text-slate-500">
+            <Link href="/terms" className="hover:text-indigo-400">Terms</Link>
+            <Link href="/privacy" className="hover:text-indigo-400">Privacy</Link>
+            <Link href="/cookies" className="hover:text-indigo-400">Cookies</Link>
+            <Link href="/data-deletion" className="hover:text-indigo-400">Deletion</Link>
+          </div>
         </footer>
       </div>
     </main>

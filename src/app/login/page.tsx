@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAuthSession } from "@/lib/auth";
 import { SignInButtons } from "@/components/sign-in-buttons";
@@ -21,6 +22,17 @@ export default async function LoginPage() {
         <div className="mt-6">
           <SignInButtons providers={providers} />
         </div>
+        <p className="mt-8 text-center text-xs text-slate-500">
+          By signing up, you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-indigo-400">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="underline hover:text-indigo-400">
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

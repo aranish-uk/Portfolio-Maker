@@ -116,6 +116,31 @@ export function TestimonialModal({ onClose, initialData }: { onClose: () => void
                             {isSubmitting ? "Submitting..." : initialData ? "Update Review" : "Submit Review"}
                         </button>
                     </div>
+
+                    {initialData && (
+                        <div className="border-t border-slate-800 pt-4 text-center">
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    if (confirm("Are you sure you want to delete your review? This cannot be undone.")) {
+                                        setIsSubmitting(true);
+                                        const res = await fetch("/api/testimonials/delete", { method: "DELETE" });
+                                        if (res.ok) {
+                                            router.refresh();
+                                            onClose();
+                                        } else {
+                                            setIsSubmitting(false);
+                                            alert("Failed to delete review.");
+                                        }
+                                    }
+                                }}
+                                className="text-xs text-red-400 hover:text-red-300 hover:underline"
+                                disabled={isSubmitting}
+                            >
+                                Delete my review
+                            </button>
+                        </div>
+                    )}
                 </form>
             </div>
         </div>
