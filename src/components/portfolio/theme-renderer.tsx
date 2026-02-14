@@ -30,6 +30,14 @@ function toArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string");
 }
 
+function ensureUrl(url: string | null): string {
+  if (!url) return "#";
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("mailto:")) {
+    return url;
+  }
+  return `https://${url}`;
+}
+
 export function ThemeRenderer({ portfolio }: { portfolio: PublicPortfolio }) {
   const theme = getTheme(portfolio.theme);
 
@@ -278,7 +286,7 @@ function ProjectCard({ item, theme }: { item: PublicPortfolio["projects"][0]; th
       <div className="flex items-start justify-between gap-4">
         <h3 className={`font-bold ${theme.classes.heading}`}>{item.name}</h3>
         {item.url && (
-          <a href={item.url} target="_blank" rel="noreferrer" className="opacity-50 hover:opacity-100">
+          <a href={ensureUrl(item.url)} target="_blank" rel="noreferrer" className="opacity-50 hover:opacity-100">
             <LinkIcon className="size-4" />
           </a>
         )}
@@ -316,7 +324,7 @@ function LinksList({ portfolio, theme }: { portfolio: PublicPortfolio; theme: Th
       {portfolio.links.map((link) => (
         <a
           key={link.url}
-          href={link.url}
+          href={ensureUrl(link.url)}
           target="_blank"
           rel="noreferrer"
           className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition ${theme.classes.button}`}

@@ -18,10 +18,20 @@ export async function getOrCreatePortfolio(userId: string): Promise<Portfolio> {
     return Boolean(found);
   });
 
-  return prisma.portfolio.create({
-    data: {
-      userId,
-      slug,
-    },
-  });
+  try {
+    return await prisma.portfolio.create({
+      data: {
+        userId,
+        slug,
+      },
+    });
+  } catch (error: any) {
+    // If we hit a unique constraint on userId, it means a portfolio was created concurrently.
+    // In that case, return the existing one.
+    if (error.code === "P2002" && error.meta?.target?.includes("userId")) {
+      const retry = await prisma.portfolio.findUnique({ where: { userId } });
+      if (retry) return retry;
+    }
+    throw error;
+  }
 }
