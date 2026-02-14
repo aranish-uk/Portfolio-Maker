@@ -87,8 +87,8 @@ export async function GET() {
             }
         }
 
-        // Fallback to hero image if user image is missing
-        const image = t.isAnonymous ? null : (t.user.image || t.user.portfolio?.heroImageUrl);
+        // Prioritize Portfolio Hero Image, fall back to OAuth image
+        const image = t.isAnonymous ? null : (t.user.portfolio?.heroImageUrl || t.user.image);
 
         return {
             id: t.id,

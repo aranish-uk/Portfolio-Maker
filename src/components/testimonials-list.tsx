@@ -41,8 +41,8 @@ export async function TestimonialsList() {
                     }
 
                     const headline = t.isAnonymous ? "Portfolio Creator" : t.user.portfolio?.headline || "Portfolio Creator";
-                    // Fallback to hero image if user image is missing (better than nothing)
-                    const image = t.isAnonymous ? null : (t.user.image || t.user.portfolio?.heroImageUrl);
+                    // Prioritize Portfolio Hero Image, fall back to OAuth image
+                    const image = t.isAnonymous ? null : (t.user.portfolio?.heroImageUrl || t.user.image);
                     const showLink = !t.isAnonymous && t.showWebsite && t.user.portfolio;
 
                     return (

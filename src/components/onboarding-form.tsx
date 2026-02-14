@@ -295,23 +295,43 @@ export function OnboardingForm({ initial }: { initial: ApiPortfolio }) {
               ) : null}
               Upload Image
             </button>
+            <button
+              className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white disabled:opacity-50"
+              type="button"
+              disabled={isBusy}
+              onClick={async () => {
+                setIsBusy(true);
+                setStatus("Importing profile picture...");
+                const res = await fetch("/api/hero/restore-oauth", { method: "POST" });
+                if (res.ok) {
+                  await refresh();
+                  setStatus("Profile picture imported!");
+                } else {
+                  const data = await res.json();
+                  setStatus(data.error || "Failed to import profile picture.");
+                }
+                setIsBusy(false);
+              }}
+            >
+              Use Profile Picture
+            </button>
           </div>
+        </div>
 
-          <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-950">
-            {portfolio.heroImageUrl ? (
-              <Image
-                src={portfolio.heroImageUrl}
-                alt="Hero preview"
-                className="h-full w-full object-cover"
-                width={600}
-                height={400}
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-slate-600">
-                <span className="text-sm">No image uploaded</span>
-              </div>
-            )}
-          </div>
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-950">
+          {portfolio.heroImageUrl ? (
+            <Image
+              src={portfolio.heroImageUrl}
+              alt="Hero preview"
+              className="h-full w-full object-cover"
+              width={600}
+              height={400}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-slate-600">
+              <span className="text-sm">No image uploaded</span>
+            </div>
+          )}
         </div>
       </section>
 
